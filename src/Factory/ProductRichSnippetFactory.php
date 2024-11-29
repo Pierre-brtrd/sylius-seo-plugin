@@ -14,6 +14,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use NumberFormatter;
 use Sylius\Bundle\CoreBundle\Templating\Helper\PriceHelper;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Calculator\ProductVariantPricesCalculatorInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ImageInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -45,36 +46,15 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
 
     public const PRODUCT_AVAILABILITY_SOLD_OUT = 'https://schema.org/SoldOut';
 
-    protected CacheManager $cacheManager;
-
-    protected PriceHelper $priceHelper;
-
-    protected ChannelContextInterface $channelContext;
-
-    protected LocaleContextInterface $localeContext;
-
-    protected CurrencyContextInterface $currencyContext;
-
-    protected ProductUrlGenerator $productUrlGenerator;
-
-    protected AvailabilityCheckerInterface $availabilityChecker;
-
     public function __construct(
-        CacheManager $cacheManager,
-        PriceHelper $priceHelper,
-        ChannelContextInterface $channelContext,
-        LocaleContextInterface $localeContext,
-        CurrencyContextInterface $currencyContext,
-        ProductUrlGenerator $productUrlGenerator,
-        AvailabilityCheckerInterface $availabilityChecker,
+        protected readonly CacheManager $cacheManager,
+        protected readonly ProductVariantPricesCalculatorInterface $productVariantPriceCalculator,
+        protected readonly ChannelContextInterface $channelContext,
+        protected readonly LocaleContextInterface $localeContext,
+        protected readonly CurrencyContextInterface $currencyContext,
+        protected readonly ProductUrlGenerator $productUrlGenerator,
+        protected readonly AvailabilityCheckerInterface $availabilityChecker,
     ) {
-        $this->cacheManager = $cacheManager;
-        $this->priceHelper = $priceHelper;
-        $this->channelContext = $channelContext;
-        $this->localeContext = $localeContext;
-        $this->currencyContext = $currencyContext;
-        $this->productUrlGenerator = $productUrlGenerator;
-        $this->availabilityChecker = $availabilityChecker;
     }
 
     public function buildRichSnippet(RichSnippetSubjectInterface $subject): RichSnippetInterface
@@ -133,7 +113,7 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
 
         if ($subject->getImages()->count() > 0) {
             $richSnippet->addData([
-                'image' => array_map(fn (ImageInterface $image) => $this->cacheManager->generateUrl($image->getPath(), 'sylius_shop_product_large_thumbnail'), $subject->getImages()->toArray()),
+                'image' => array_map(fn(ImageInterface $image) => $this->cacheManager->generateUrl($image->getPath(), 'sylius_shop_product_large_thumbnail'), $subject->getImages()->toArray()),
             ]);
         }
 
@@ -166,8 +146,8 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
             if (!$variant->isEnabled()) {
                 return;
             }
-            
-            $price = $this->priceHelper->getPrice(
+
+            $price = $this->productVariantPriceCalculator->calculate(
                 $variant,
                 ['channel' => $channel],
             );

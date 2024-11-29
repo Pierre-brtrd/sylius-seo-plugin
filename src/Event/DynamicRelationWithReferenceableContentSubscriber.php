@@ -6,10 +6,15 @@ namespace Dedi\SyliusSEOPlugin\Event;
 
 use Dedi\SyliusSEOPlugin\Domain\SEO\Adapter\ReferenceableInterface;
 use Dedi\SyliusSEOPlugin\Entity\SEOContent;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Mapping\PreUpdate;
 
+#[AsEntityListener(event: PreUpdate::class, entity: SEOContent::class, method: 'loadClassMetadata')]
 class DynamicRelationWithReferenceableContentSubscriber implements EventSubscriber
 {
     public const REFERENCIABLE_FIELD_NAME = 'referenceableContent';
@@ -19,8 +24,9 @@ class DynamicRelationWithReferenceableContentSubscriber implements EventSubscrib
         return [Events::loadClassMetadata];
     }
 
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
+    public function loadClassMetadata(PreUpdateEventArgs $eventArgs): void
     {
+        dd($eventArgs);
         $metadata = $eventArgs->getClassMetadata();
         if (
             !$metadata->getReflectionClass()->implementsInterface(ReferenceableInterface::class) ||
