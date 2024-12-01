@@ -13,6 +13,7 @@ class SEOContent implements SEOContentInterface
     protected ?int $id = null;
 
     #[ORM\OneToOne(targetEntity: ReferenceableInterface::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     protected ?ReferenceableInterface $referenceableContent = null;
 
     use TranslatableTrait {
