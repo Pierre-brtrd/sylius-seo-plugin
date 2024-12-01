@@ -201,6 +201,10 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
                 '@type' => 'Rating',
                 'ratingValue' => $bestReview->getRating(),
             ],
+            'author' => [
+                '@type' => 'Person',
+                'name' => !empty($bestReview->getAuthor()->getFullName()) ? $bestReview->getAuthor()->getFullName() : $bestReview->getAuthor()->getEmail(),
+            ],
             'reviewBody' => $bestReview->getComment(),
         ];
 
