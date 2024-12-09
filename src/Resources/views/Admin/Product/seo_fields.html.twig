@@ -3,17 +3,17 @@
 
 {% form_theme form '@DediSyliusSEOPlugin/Admin/Product/form_theme.html.twig' %}
 
-<div class="alert alert-info">
-	<div class="fs-3 fw-bold">{{ 'dedi_sylius_seo_plugin.ui.product_info_title'|trans }}</div>
-	<p>{{ 'dedi_sylius_seo_plugin.ui.product_info_description'|trans }}</p>
-	<a href="https://developers.google.com/search/docs/data-types/product" target="_blank">{{ 'dedi_sylius_seo_plugin.ui.product_info_link'|trans }}</a>
+<div class="alert alert-info dismisable">
+	<div class="fs-3 fw-bold">{{ 'dedi_sylius_seo_plugin.ui.info_title'|trans }}</div>
+	<p>{{ 'dedi_sylius_seo_plugin.ui.info_description'|trans }}</p>
 </div>
 
 {{ form_row(form.referenceableContent) }}
 
-<div class="alert alert-info dismisable">
-	<div class="fs-3 fw-bold">{{ 'dedi_sylius_seo_plugin.ui.info_title'|trans }}</div>
-	<p>{{ 'dedi_sylius_seo_plugin.ui.info_description'|trans }}</p>
+<div class="alert alert-info">
+	<div class="fs-3 fw-bold">{{ 'dedi_sylius_seo_plugin.ui.product_info_title'|trans }}</div>
+	<p>{{ 'dedi_sylius_seo_plugin.ui.product_info_description'|trans }}</p>
+	<a href="https://developers.google.com/search/docs/data-types/product" target="_blank">{{ 'dedi_sylius_seo_plugin.ui.product_info_link'|trans }}</a>
 </div>
 
 <div class="row mb-3">
