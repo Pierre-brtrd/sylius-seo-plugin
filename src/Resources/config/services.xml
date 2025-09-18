@@ -60,6 +60,13 @@
             <tag name="dedi_sylius_seo_plugin.rich_snippets.factory"/>
         </service>
 
+        <service id="dedi_sylius_seo_plugin.rich_snippets.factory.taxon" class="Dedi\SyliusSEOPlugin\Factory\TaxonRichSnippetFactory">
+            <argument key="$cacheManager" type="service" id="liip_imagine.cache.manager"/>
+            <argument key="$localeContext" type="service" id="sylius.context.locale.composite"/>
+            <argument key="$router" type="service" id="router.default"/>
+            <tag name="dedi_sylius_seo_plugin.rich_snippets.factory"/>
+        </service>
+
         <service id="dedi_sylius_seo_plugin.rich_snippets.factory.organization" class="Dedi\SyliusSEOPlugin\Factory\OrganizationRichSnippetFactory">
             <argument key="$channelContext" type="service" id="sylius.context.channel.cached"/>
             <argument key="$router" type="service" id="router.default"/>

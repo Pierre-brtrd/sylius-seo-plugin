@@ -55,6 +55,9 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
     ) {
     }
 
+    /**
+     * @param ProductRichSnippetSubject $subject
+     */
     public function buildRichSnippet(RichSnippetSubjectInterface $subject): RichSnippetInterface
     {
         Assert::isInstanceOf($subject, ProductInterface::class);
