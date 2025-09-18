@@ -60,6 +60,12 @@
             <tag name="dedi_sylius_seo_plugin.rich_snippets.factory"/>
         </service>
 
+        <service id="dedi_sylius_seo_plugin.rich_snippets.factory.organization" class="Dedi\SyliusSEOPlugin\Factory\OrganizationRichSnippetFactory">
+            <argument key="$channelContext" type="service" id="sylius.context.channel.cached"/>
+            <argument key="$router" type="service" id="router.default"/>
+            <tag name="dedi_sylius_seo_plugin.rich_snippets.factory"/>
+        </service>
+
         <service id="dedi_sylius_seo_plugin.rich_snippets.factory.subject_url" class="Dedi\SyliusSEOPlugin\Domain\SEO\Factory\RichSnippetSubjectUrlFactory">
             <argument key="$urlGenerators" type="tagged_iterator" tag="dedi_sylius_seo_plugin.rich_snippets.subject_url_generator"/>
         </service>

@@ -11,8 +11,6 @@ use Dedi\SyliusSEOPlugin\Domain\SEO\Model\RichSnippet\ProductRichSnippet;
 use Dedi\SyliusSEOPlugin\Domain\SEO\Model\RichSnippetInterface;
 use Dedi\SyliusSEOPlugin\Factory\SubjectUrl\ProductUrlGenerator;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use NumberFormatter;
-use Sylius\Bundle\CoreBundle\Templating\Helper\PriceHelper;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Calculator\ProductVariantPricesCalculatorInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -113,7 +111,7 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
 
         if ($subject->getImages()->count() > 0) {
             $richSnippet->addData([
-                'image' => array_map(fn(ImageInterface $image) => $this->cacheManager->generateUrl($image->getPath(), 'sylius_shop_product_large_thumbnail'), $subject->getImages()->toArray()),
+                'image' => array_map(fn (ImageInterface $image) => $this->cacheManager->generateUrl($image->getPath(), 'sylius_shop_product_large_thumbnail'), $subject->getImages()->toArray()),
             ]);
         }
 
@@ -158,6 +156,7 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
                 'priceCurrency' => $currencyCode,
                 'price' => $this->formatCurrencyForRichSnippets($price, $currencyCode),
                 'availability' => $this->getAvailability($variant),
+                'priceValidUntil' => (new \DateTime())->modify('+1 month')->format('Y-m-d'),
             ];
         }, $subject->getVariants()->toArray());
     }
@@ -173,16 +172,16 @@ class ProductRichSnippetFactory extends AbstractRichSnippetFactory
 
     protected function formatCurrencyForRichSnippets(int $amount, string $currency): string
     {
-        $formatter = new NumberFormatter($this->localeContext->getLocaleCode(), NumberFormatter::CURRENCY);
+        $formatter = new \NumberFormatter($this->localeContext->getLocaleCode(), \NumberFormatter::CURRENCY);
 
         // let's remove any monetary symbol and spaces
-        $formatter->setSymbol(NumberFormatter::MONETARY_SEPARATOR_SYMBOL, '.');
-        $formatter->setSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, '.');
+        $formatter->setSymbol(\NumberFormatter::MONETARY_SEPARATOR_SYMBOL, '.');
+        $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, '.');
         $formatter->setPattern('#0.0#');
 
         $result = $formatter->formatCurrency(abs($amount / 100), $currency);
 
-        return $amount >= 0 ? $result : '-' . $result;
+        return $amount >= 0 ? $result : '-'.$result;
     }
 
     protected function getReviewAndRatingData(ProductInterface $subject): array
