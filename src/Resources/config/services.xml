@@ -113,7 +113,7 @@
         </service>
 
         <service id="dedi_sylius_seo_plugin.metadata.twig.metadata_image_extension" class="Dedi\SyliusSEOPlugin\Twig\ReferenceableImageExtension">
-            <argument key="$filterExtension" type="service" id="liip_imagine.templating.filter_extension"/>
+            <argument key="$cacheManager" type="service" id="liip_imagine.cache.manager"/>
             <tag name="twig.extension"/>
         </service>
 
